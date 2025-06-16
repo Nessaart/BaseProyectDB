@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NoSQL METER LOS DATOS</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="stylesheet" href="./css/Stilos1.css">
+</head>
+
+<body>
+  <div class="card">
+    <h1>Registro de Enclosures</h1>
+
+    <section>
+      <h2>Registro Manual</h2>
+
+      <label for="enclosureId">ID del Enclosure:</label>
+      <input type="text" id="enclosureId" placeholder="E1" />
+
+      <label for="name">Nombre:</label>
+      <input type="text" id="name" placeholder="Sabana" />
+
+      <label for="inhabit">Hábitat:</label>
+      <input type="text" id="inhabit" placeholder="Terrestre o Acuático" />
+
+      <label for="size">Tamaño:</label>
+      <input type="number" id="size" placeholder="100" />
+
+      <label for="weather">Clima:</label>
+      <input type="text" id="weather" placeholder="Seco" />
+
+      <button id="RegisterButtonEnclosure">Registrar Manual</button>
+    </section>
+
+    <hr style="margin: 2rem 0; border-color: #333;" />
+
+    <section>
+      <h2>Generación Automática</h2>
+
+      <label for="enclosureCount">Cantidad de Enclosures:</label>
+      <input type="number" id="enclosureCount" name="enclosureCount" value="1" min="1" />
+
+      <button id="generateBtn">Generar Automáticamente</button>
+    </section>
+
+    <hr style="margin: 2rem 0; border-color: #333;" />
+
+
+    <a href="./IndexPage3.html" style="display:block; margin-top:1rem; color:#ffa500;">Visualizar Sql</a>
+    <a href="./IndexPage2.html" style="display:block; margin-top:1rem; color:#ffa500;">Mostrar Nosql</a>
+  </div>
+
+  <script src="./js/main.js"></script>
+</body>
+</html>
