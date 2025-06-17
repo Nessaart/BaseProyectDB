@@ -1,10 +1,5 @@
 const mysql = require('mysql2');
-const config = {
-    host: 'localhost',
-    user: 'root',
-    password: 'root',
-    database: 'zoo'
-};
+const config = require('../env/mysqlConfig');
 
 class SqlConnection{
     constructor(){
