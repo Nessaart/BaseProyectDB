@@ -1,9 +1,7 @@
 const express = require("express");
 const { getFirestore } = require("firebase-admin/firestore");
-const firebaseApp = require("../../services/firebaseService.js");
+const db = require("../../services/firebaseService.js");
 const router = express.Router();
-
-const db = getFirestore(firebaseApp);
 
 // ========== GET all documents ==========
 router.get("/all", async (req, res) => {
