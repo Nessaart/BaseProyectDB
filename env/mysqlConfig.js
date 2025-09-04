@@ -1,8 +1,8 @@
 const config = {
     host: 'localhost',
     user: 'root',
-    password: 'root',
-    database: 'test_db'
+    password: 'Memin_2522',
+    database: 'steam_example'
 };
 
 module.exports = config;

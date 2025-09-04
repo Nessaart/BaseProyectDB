@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 
-const firebaseRoutes = require('./routes/firebase/firebaseRoutes');
+//const firebaseRoutes = require('./routes/firebase/firebaseRoutes');
 const sqlRoutes = require('./routes/mysql/sqlRoutes');
 
 const app = express();
@@ -13,7 +13,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true })); 
 app.use(express.json()); 
 
-app.use('/nosql', firebaseRoutes);
+//app.use('/nosql', firebaseRoutes);
 app.use('/sql', sqlRoutes);
 
 
