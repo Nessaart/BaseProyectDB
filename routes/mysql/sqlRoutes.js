@@ -1,69 +1,55 @@
-const express = require("express");
-const SqlService = require("../../services/sqlService");
-
+const express = require('express');
 const router = express.Router();
+const db = require('../mysqlConfig');
 
+// 🔑 Función de encriptación personalizada
+function customEncrypt(password) {
+  return Buffer.from(password.split('').reverse().join('')).toString('base64');
+}
 
-// ========== Post entry to table ==========
-router.post('/post', async (req, res) => {
-  const { param1, param2, paramN } = req.body;
-  if (!param1 || !param2 || !paramN) {
-    return res.status(400).send("Missing fields.");
+// ================== REGISTRO ==================
+router.post('/register', (req, res) => {
+  const { username, password } = req.body;
+
+  if (!username || !password) {
+    return res.json({ success: false, message: "❌ Usuario y contraseña requeridos" });
   }
 
-  const db = new SqlService();
-  const tableName = "test_table"
-  try {
-    await db.connectToDb();
-    await db.query(
-      `INSERT INTO ${tableName} (param1, param2, paramN) VALUES (?, ?, ?)`,
-      [param1, param2, paramN]
-    );
-    res.status(200).send("Entry created");
-  } catch (err) {
-    console.error("SQL error:", err);
-    res.status(500).send("Error creating entry.");
-  } finally {
-    await db.closeConnection();
-  }
-});
+  const encryptedPassword = customEncrypt(password);
 
-// ========== Get all entries of a table ==========
-router.get('/get-all', async (req, res) => {
-  const db = new SqlService();
-  const tableName = "test_table"
-  try {
-    await db.connectToDb();
-    const data = await db.query(`SELECT * FROM ${tableName}`);
-    res.status(200).json(data);
-  } catch (err) {
-    console.error("SQL error:", err);
-    res.status(500).send("Error fetching data.");
-  } finally {
-    await db.closeConnection();
-  }
-});
-
-// ========== Get one entry of a table ==========
-router.get('/get-one/:id', async (req, res) => {
-  const db = new SqlService();
-  const tableName = "test_table"
-  try {
-    await db.connectToDb();
-    const result = await db.query(
-      `SELECT * FROM ${tableName} WHERE id = ?`,
-      [req.params.id]
-    );
-    await db.closeConnection();
-
-    if (result.length === 0) {
-      res.status(404).send("Entry not found.");
-    } else {
-      res.status(200).json(result[0]);
+  const query = "INSERT INTO usuarios (username, password_enc) VALUES (?, ?)";
+  db.query(query, [username, encryptedPassword], (err, result) => {
+    if (err) {
+      console.error("❌ Error en registro:", err.message);
+      return res.json({ success: false, message: "Error al registrar usuario" });
     }
-  } catch (err) {
-    console.error("SQL error:", err);
-    res.status(500).send("Error retrieving info.");
-  }
+    res.json({ success: true, message: "✅ Usuario registrado correctamente" });
+  });
 });
+
+// ================== LOGIN ==================
+router.post('/login', (req, res) => {
+  const { username, password } = req.body;
+
+  if (!username || !password) {
+    return res.json({ success: false, message: "❌ Usuario y contraseña requeridos" });
+  }
+
+  const encryptedPassword = customEncrypt(password);
+
+  const query = "SELECT * FROM usuarios WHERE username = ? AND password_enc = ?";
+  db.query(query, [username, encryptedPassword], (err, results) => {
+    if (err) {
+      console.error("❌ Error en login:", err.message);
+      return res.json({ success: false, message: "Error en servidor" });
+    }
+
+    if (results.length > 0) {
+      res.json({ success: true, message: `✅ Bienvenido ${username}` });
+    } else {
+      res.json({ success: false, message: "❌ Usuario o contraseña incorrectos" });
+    }
+  });
+});
+
 module.exports = router;

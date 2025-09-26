@@ -1,22 +1,18 @@
 const express = require('express');
-const path = require('path');
-
-const firebaseRoutes = require('./routes/firebase/firebaseRoutes');
-const sqlRoutes = require('./routes/mysql/sqlRoutes');
-
 const app = express();
-const port = 3000;
+const bodyParser = require('body-parser');
+const sqlRoutes = require('./routes/sqlRoutes');
 
-app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(express.urlencoded({ extended: true })); 
-app.use(express.json()); 
+// Servir archivos estáticos (html, js, css)
+app.use(express.static('public'));
 
-app.use('/nosql', firebaseRoutes);
-app.use('/sql', sqlRoutes);
+// Rutas SQL
+app.use('/auth', sqlRoutes);
 
-
-app.listen(port, () => {
-  console.log(`Servidor corriendo en http://localhost:${port}`);
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
 });
